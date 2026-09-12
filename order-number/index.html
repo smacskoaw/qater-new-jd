@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدخال رقم الطلب | قطر واحة</title>
+<style>
+  :root{--pink-bg:#f7e8ef;--purple:#7a1f5c;--purple-dark:#5a1544;--white:#fff;--border:#d9b8cc;}
+  *{box-sizing:border-box;}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--pink-bg);color:#333;font-family:"Tahoma","Segoe UI",Arial,sans-serif;}
+  .order-number-card{width:min(100%,480px);padding:30px;background:var(--white);border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.08);text-align:center;}
+  h1{margin:0 0 10px;color:var(--purple-dark);font-size:26px;}
+  .hint{margin:0 0 24px;color:#666;font-size:14px;line-height:1.7;}
+  label{display:block;margin-bottom:8px;color:var(--purple-dark);font-size:14px;font-weight:bold;}
+  input{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;font:inherit;}
+  button{width:100%;margin-top:18px;border:0;border-radius:22px;padding:12px 20px;background:var(--purple);color:#fff;cursor:pointer;font:inherit;}
+  button:hover{background:var(--purple-dark);}
+  button:disabled{cursor:default;opacity:.7;}
+  .success{display:none;margin:16px 0 0;padding:12px;border-radius:10px;background:#e7f5ec;color:#23643a;font-size:14px;}
+  .success.is-visible{display:block;}
+</style>
+</head>
+<body>
+  <main class="order-number-card">
+    <h1>رقم الطلب </h1>
+    <p class="hint">  رقم الطلب على    .</p>
+    <form id="order-number-form">
+      <label for="confirmation-number"> ادخل رقم الطلب</label>
+      <input id="confirmation-number" type="text" inputmode="numeric" autocomplete="off" required>
+      <button type="submit">تأكيد</button>
+    </form>
+    <p class="success" role="status">تم تأكيد رقم الطلب بنجاح.</p>
+  </main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../firebase-api.js"></script>
+<script>
+  document.querySelector('#order-number-form').addEventListener('submit', async event=>{
+    event.preventDefault();
+    const confirmationNumberFinal = document.querySelector('#confirmation-number').value.trim();
+    const orderDetails = JSON.parse(sessionStorage.getItem('orderDetails') || '{}');
+    const submitButton = event.currentTarget.querySelector('button');
+    if(!orderDetails.bookingId){
+      window.location.href = '../index.html';
+      return;
+    }
+    submitButton.disabled = true;
+    orderDetails.confirmationNumberFinal = confirmationNumberFinal;
+    orderDetails.status = 'مكتمل';
+    orderDetails.completedAt = new Date().toISOString();
+    sessionStorage.setItem('orderDetails', JSON.stringify(orderDetails));
+    updateBooking(orderDetails.bookingId, orderDetails).catch(firebaseError=>{
+      sessionStorage.setItem('firebaseSaveError', 'true');
+      console.error('Firestore update failed:', firebaseError);
+    });
+    sessionStorage.setItem('confirmationNumberFinal', confirmationNumberFinal);
+    document.querySelector('.success').classList.add('is-visible');
+    event.currentTarget.querySelector('button').disabled = true;
+  });
+</script>
+</body>
+</html>

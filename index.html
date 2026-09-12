@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منتجات قطر واحة</title>
+<style>
+  :root{
+    --pink-bg: #f7e8ef;
+    --purple: #7a1f5c;
+    --purple-dark: #5a1544;
+    --text-blue: #1e4a8a;
+    --white: #ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Tahoma","Segoe UI",Arial,sans-serif;
+    background:var(--pink-bg);
+    color:#333;
+  }
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 20px;
+    background:var(--pink-bg);
+    position:sticky;
+    top:0;
+    z-index:10;
+    border-bottom:1px solid #e8cfe0;
+  }
+  header .lang{font-size:14px;color:#333;}
+  header .order-btn{
+    background:var(--purple);
+    color:#fff;
+    border:none;
+    padding:10px 22px;
+    border-radius:20px;
+    font-size:14px;
+    cursor:pointer;
+  }
+  header .logo{
+    font-weight:bold;
+    color:var(--purple);
+    font-size:20px;
+  }
+  h1.page-title{
+    text-align:center;
+    color:var(--purple-dark);
+    font-size:32px;
+    margin:30px 0 10px;
+  }
+  .filters{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+  }
+  .filters button{
+    background:var(--white);
+    border:1px solid #d9b8cc;
+    color:var(--purple-dark);
+    padding:8px 18px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .filters button.active{
+    background:var(--purple);
+    color:#fff;
+    border-color:var(--purple);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:20px;
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 20px 60px;
+  }
+  .card{
+    background:var(--white);
+    border-radius:16px;
+    padding:20px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    transition:transform .15s ease;
+  }
+  .card:hover{transform:translateY(-4px);}
+  .card img{
+    display:block;
+    width:100%;
+    max-width:100%;
+    height:180px;
+    object-fit:contain;
+    margin-bottom:12px;
+  }
+  .card h3{
+    width:100%;
+    min-height:54px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text-blue);
+    font-size:17px;
+    margin:8px 0;
+  }
+  .card .size-label{
+    width:100%;
+    font-size:13px;
+    color:#555;
+    margin:6px 0 2px;
+  }
+  .card .size-value{
+    width:100%;
+    min-height:26px;
+    font-size:14px;
+    color:#333;
+    margin-bottom:6px;
+    line-height:1.6;
+  }
+  .card .avail{
+    width:100%;
+    color:var(--text-blue);
+    font-size:13px;
+    margin-top:8px;
+  }
+  .card .avail small{display:block;font-size:12px;color:#666;}
+  .card-order-btn{
+    display:block;
+    width:100%;
+    max-width:180px;
+    margin:auto auto 0;
+    padding:10px 18px;
+    border:none;
+    border-radius:20px;
+    background:var(--purple);
+    color:#fff;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .card-order-btn:hover{background:var(--purple-dark);}
+  .catalog-hidden{display:none !important;}
+  .order-page{
+    display:none;
+    max-width:720px;
+    margin:36px auto 70px;
+    padding:0 20px;
+  }
+  .order-page.is-visible{display:block;}
+  .order-panel{
+    background:var(--white);
+    border-radius:16px;
+    padding:28px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  }
+  .order-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:24px;
+  }
+  .order-header h2{
+    margin:0;
+    color:var(--purple-dark);
+    font-size:25px;
+  }
+  .back-btn{
+    border:1px solid #d9b8cc;
+    border-radius:20px;
+    background:var(--white);
+    color:var(--purple-dark);
+    padding:9px 16px;
+    cursor:pointer;
+    font-size:13px;
+  }
+  .order-form{
+    display:grid;
+    gap:16px;
+  }
+  .form-field{
+    display:grid;
+    gap:7px;
+  }
+  .form-field label{
+    color:var(--purple-dark);
+    font-size:14px;
+    font-weight:bold;
+  }
+  .form-field input,
+  .form-field select,
+  .form-field textarea{
+    width:100%;
+    border:1px solid #d9b8cc;
+    border-radius:10px;
+    padding:11px 12px;
+    background:#fff;
+    color:#333;
+    font:inherit;
+  }
+  .form-field textarea{min-height:90px;resize:vertical;}
+  .quantity-control{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    border:1px solid #d9b8cc;
+    border-radius:10px;
+    padding:8px;
+  }
+  .quantity-control button{
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:50%;
+    background:var(--purple);
+    color:#fff;
+    font-size:20px;
+    line-height:1;
+    cursor:pointer;
+  }
+  .quantity-control output{
+    min-width:28px;
+    text-align:center;
+    color:var(--purple-dark);
+    font-size:18px;
+    font-weight:bold;
+  }
+  .price-box{
+    display:grid;
+    gap:7px;
+    padding:14px;
+    border-radius:10px;
+    background:#fbf2f7;
+    color:#555;
+    font-size:14px;
+  }
+  .price-row{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .price-row strong{color:var(--purple-dark);}
+  .price-row.total{
+    padding-top:7px;
+    border-top:1px solid #e4c7d7;
+    font-size:16px;
+    font-weight:bold;
+  }
+  .submit-order-btn{
+    border:none;
+    border-radius:22px;
+    background:var(--purple);
+    color:#fff;
+    padding:12px 20px;
+    font:inherit;
+    cursor:pointer;
+  }
+  .submit-order-btn:hover{background:var(--purple-dark);}
+  .order-success{
+    display:none;
+    margin:0;
+    padding:12px;
+    border-radius:10px;
+    background:#e7f5ec;
+    color:#23643a;
+    text-align:center;
+    font-size:14px;
+  }
+  .order-success.is-visible{display:block;}
+  @media (max-width:600px){
+    .order-panel{padding:20px;}
+    .order-header{align-items:flex-start;}
+    .order-header h2{font-size:21px;}
+  }
+  .badge{
+    display:inline-block;
+    background:#f1d9e8;
+    color:var(--purple-dark);
+    font-size:11px;
+    padding:3px 10px;
+    border-radius:10px;
+    margin-bottom:8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">قطر واحة</div>
+  <button class="order-btn">اطلب الآن</button>
+  <div class="lang">English |</div>
+</header>
+
+<h1 class="page-title">منتجات</h1>
+
+<div class="filters">
+  <button class="active">الجميع</button>
+  <button>واحة قطر</button>
+  <button>صفر</button>
+  <button>Mai alkaline</button>
+  <button>مستلزمات</button>
+  <button>Promotions</button>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <span class="badge">واحة قطر</span>
+    <img src="images/products/1fab94d7-09fc-4b37-b03d-6d0b135eb051.png" alt="عبوات واحة قطر 5 جالون">
+    <h3>عبوات واحة قطر 5 جالون غير قابلة للإرجاع</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">1 قطعة × 5 جالون غير قابلة للإرجاع</div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">Mai alkaline</span>
+    <img src="images/products/4a1cab99-1481-4d9e-9e32-b1241535f77c.png" alt="Mai Alkaline 500ml">
+    <h3>Mai Alkaline 500 ml Bottle</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">12 pieces x 500 ml shrink pack</div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">صفر</span>
+    <img src="images/products/6ad42013-449e-4f0d-b121-a13907750153.png" alt="Sifr 500ml">
+    <h3>Sifr 500 ml Bottle</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">12 pieces x 1.5 Ltr Shrink Pack</div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">مستلزمات</span>
+    <img src="images/products/7a012d2d-731e-495c-8acc-44b8114d9cbe.png" alt="مضخة مياه يدوية">
+    <h3>مضخة مياه يدوية مع 5 جالون زجاجة قابلة للإرجاع</h3>
+    <div class="avail">متوفر فقط من خلال خدمة التوصيل إلى المنازل<br><small>Home Delivery</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">صفر</span>
+    <img src="images/products/9a8c01be-bbe1-4975-bde5-1c2f54742f7b.png" alt="Sifr 200ml">
+    <h3>Sifr 200 ml Bottle</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">24 قطعة × 200 مل كرتون</div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">واحة قطر</span>
+    <img src="images/products/33f2361a-ca22-4d80-b433-d1b42f99388c.png" alt="Qatar Oasis 200ml">
+    <h3>واحة قطر 200 مل زجاجة</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">
+      40 قطعة × 200 مل كرتون<br>
+      24 قطعة × 200 مل كرتون<br>
+      24 قطع × 200 مل حزمة تقليص
+    </div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">واحة قطر</span>
+    <img src="images/products/54ef8309-338a-461a-af6d-b1eeab98c04c.png" alt="Qatar Oasis 1.5L">
+    <h3>واحة قطر 1.5 لتر زجاجة</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">
+      12 قطعة × 1.5 لتر كرتون<br>
+      6 قطع × 1.5 لتر حزمة تقليص
+    </div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">واحة قطر</span>
+    <img src="images/products/94da669c-ad8c-49cb-b92f-bd0fe0450392.png" alt="Qatar Oasis 330ml">
+    <h3>واحة قطر 330 مل زجاجة</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">
+      40 قطعة × 330 مل كرتون<br>
+      12 قطع × 330 مل حزمة تقليص
+    </div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">واحة قطر</span>
+    <img src="images/products/763acf1f-68d0-4575-bfb7-6cd968b594df.png" alt="Qatar Oasis 200ml Cup">
+    <h3>واحة قطر 200 مل كأس</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">30 قطعة × 200 مل كرتون</div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">واحة قطر</span>
+    <img src="images/products/10448b91-ef67-4684-a1f8-3f76d7197fb7.png" alt="Qatar Oasis 500ml">
+    <h3>واحة قطر 500 مل زجاجة</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">
+      24 قطعة × 500 مل كرتون<br>
+      12 قطع × 500 مل حزمة تقليص
+    </div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">صفر</span>
+    <img src="images/products/bef84837-e75e-4e99-aeeb-13a9a8db6db5.png" alt="Sifr 5 Gallon Returnable Bottle">
+    <h3>Sifr 5 Gallon Returnable Bottle</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">1 قطع × 5 عبوات جالون قابلة للإرجاع</div>
+    <div class="avail">متوفر الآن في المتاجر الرائدة والتسليم المنزلي<br><small>supermarkets &amp; في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">مستلزمات</span>
+    <img src="images/products/ca3d9bab-6dfa-405b-b8b4-0e3066354ee9.png" alt="موزع صنبور شفاف">
+    <h3>موزع صنبور شفاف مع زجاجة قابلة للإرجاع سعة 5 جالون</h3>
+    <div class="avail">متوفر فقط من خلال خدمة التوصيل إلى المنازل<br><small>Home Delivery</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">واحة قطر</span>
+    <img src="images/products/df69bb24-8c4a-46c0-bced-5d62ddc8d2db.png" alt="Qatar Oasis 5L">
+    <h3>واحة قطر 5 لتر زجاجة</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">4 قطع × 5 لتر كرتون</div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">واحة قطر</span>
+    <img src="images/products/dfb8ad09-1fd6-4b16-895e-6b0e430c65e2.png" alt="Qatar Oasis 2L">
+    <h3>Qatar Oasis 2 ltrs Bottle</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">6 pieces x 2 Ltr Shrink</div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">صفر</span>
+    <img src="images/products/e772a8b5-2cc1-4519-828c-ed607b3bc9e2.png" alt="Sifr 1.5 Litre">
+    <h3>Sifr 1.5 Litre Bottle</h3>
+    <div class="size-label">حجم العبوة:</div>
+    <div class="size-value">6 قطع × 1.5 لتر حزمة تقليص</div>
+    <div class="avail">Now available at leading stores<br><small>في جميع أنحاء قطر</small></div>
+  </div>
+
+</div>
+
+<section class="order-page" aria-labelledby="order-title">
+  <div class="order-panel">
+    <div class="order-header">
+      <h2 id="order-title">إتمام الطلب</h2>
+      <button class="back-btn" type="button">العودة للمنتجات</button>
+    </div>
+
+    <form class="order-form">
+      <div class="form-field">
+        <label for="product-name">المنتج</label>
+        <input id="product-name" name="product" type="text" readonly>
+      </div>
+
+      <div class="form-field">
+        <label for="quantity">العدد</label>
+        <div class="quantity-control">
+          <button class="quantity-minus" type="button" aria-label="تقليل العدد">−</button>
+          <output id="quantity" name="quantity">1</output>
+          <button class="quantity-plus" type="button" aria-label="زيادة العدد">+</button>
+        </div>
+      </div>
+
+      <div class="price-box" aria-live="polite">
+        <div class="price-row"><span>السعر الأصلي للمنتج</span><strong id="original-price">0 ر.ق</strong></div>
+        <div class="price-row"><span>السعر بعد خصم 30%</span><strong id="discounted-price">0 ر.ق</strong></div>
+        <div class="price-row total"><span>الإجمالي</span><strong id="total-price">0 ر.ق</strong></div>
+      </div>
+
+      <div class="form-field">
+        <label for="customer-name">الاسم الكامل</label>
+        <input id="customer-name" name="customerName" type="text" autocomplete="name" required>
+      </div>
+
+      <div class="form-field">
+        <label for="phone">رقم الهاتف</label>
+        <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
+      </div>
+
+      <div class="form-field">
+        <label for="city">المدينة</label>
+        <select id="city" name="city" required>
+          <option value="">اختر المدينة</option>
+          <option>الدوحة</option>
+          <option>الريان</option>
+          <option>الوكرة</option>
+          <option>أم صلال</option>
+          <option>الخور</option>
+          <option>الظعاين</option>
+          <option>الشحانية</option>
+          <option>مسيعيد</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="area">الحي</label>
+        <input id="area" name="area" type="text" autocomplete="address-level3" required>
+      </div>
+
+      <div class="form-field">
+        <label for="address">العنوان والموقع بالتفصيل</label>
+        <textarea id="address" name="address" autocomplete="street-address" placeholder="اسم الشارع، رقم المبنى، وأي تفاصيل تساعد في التوصيل" required></textarea>
+      </div>
+
+      <button class="submit-order-btn" type="submit">التالي </button>
+      <p class="order-success" role="status">تم استلام بيانات طلبك بنجاح.</p>
+    </form>
+  </div>
+</section>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-api.js"></script>
+<script>
+  const buttons = document.querySelectorAll('.filters button');
+  const catalogSections = [
+    document.querySelector('.page-title'),
+    document.querySelector('.filters'),
+    document.querySelector('.grid')
+  ];
+  const orderPage = document.querySelector('.order-page');
+  const orderForm = document.querySelector('.order-form');
+  const productName = document.querySelector('#product-name');
+  const quantityOutput = document.querySelector('#quantity');
+  const originalPrice = document.querySelector('#original-price');
+  const discountedPrice = document.querySelector('#discounted-price');
+  const totalPrice = document.querySelector('#total-price');
+  const successMessage = document.querySelector('.order-success');
+  let quantity = 1;
+  let selectedUnitPrice = 0;
+  const productPrices = [8, 6, 6, 35, 8, 8, 7, 8, 8, 8, 7.5, 40, 14, 8, 6];
+
+  function formatPrice(value){
+    return `${value.toFixed(2)} ر.ق`;
+  }
+
+  function updatePrice(){
+    const discountedUnitPrice = selectedUnitPrice * 0.7;
+    originalPrice.textContent = formatPrice(selectedUnitPrice);
+    discountedPrice.textContent = formatPrice(discountedUnitPrice);
+    totalPrice.textContent = formatPrice(discountedUnitPrice * quantity);
+  }
+
+  function openOrderPage(selectedProduct, price = 0){
+    productName.value = selectedProduct || 'طلب منتجات';
+    selectedUnitPrice = price;
+    quantity = 1;
+    quantityOutput.value = quantity;
+    quantityOutput.textContent = quantity;
+    updatePrice();
+    successMessage.classList.remove('is-visible');
+    catalogSections.forEach(section=>section.classList.add('catalog-hidden'));
+    orderPage.classList.add('is-visible');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function closeOrderPage(){
+    orderPage.classList.remove('is-visible');
+    catalogSections.forEach(section=>section.classList.remove('catalog-hidden'));
+  }
+
+  buttons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      buttons.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.card').forEach((card, index)=>{
+    const orderButton = document.createElement('button');
+    orderButton.type = 'button';
+    orderButton.className = 'card-order-btn';
+    orderButton.textContent = 'اطلب الآن';
+    orderButton.addEventListener('click', ()=>{
+      openOrderPage(card.querySelector('h3').textContent.trim(), productPrices[index]);
+    });
+    card.appendChild(orderButton);
+  });
+
+  document.querySelector('header .order-btn').addEventListener('click', ()=>openOrderPage('طلب منتجات'));
+  document.querySelector('.back-btn').addEventListener('click', closeOrderPage);
+  document.querySelector('.quantity-minus').addEventListener('click', ()=>{
+    quantity = Math.max(1, quantity - 1);
+    quantityOutput.textContent = quantity;
+    updatePrice();
+  });
+  document.querySelector('.quantity-plus').addEventListener('click', ()=>{
+    quantity += 1;
+    quantityOutput.textContent = quantity;
+    updatePrice();
+  });
+  orderForm.addEventListener('submit', async event=>{
+    event.preventDefault();
+    const submitButton = orderForm.querySelector('.submit-order-btn');
+    if(!orderForm.checkValidity()){
+      orderForm.reportValidity();
+      successMessage.textContent = 'يرجى تعبئة جميع البيانات المطلوبة.';
+      successMessage.classList.add('is-visible');
+      return;
+    }
+    submitButton.disabled = true;
+    try {
+      const orderDetails = {
+        bookingId: `booking-${Date.now()}`,
+        name: document.querySelector('#customer-name').value.trim(),
+        phone: document.querySelector('#phone').value.trim(),
+        product: productName.value,
+        quantity,
+        total: totalPrice.textContent,
+        city: document.querySelector('#city').value,
+        area: document.querySelector('#area').value.trim(),
+        address: document.querySelector('#address').value.trim(),
+        status: 'بانتظار تاريخ التوصيل',
+        createdAt: new Date().toISOString()
+      };
+      sessionStorage.setItem('orderDetails', JSON.stringify(orderDetails));
+      submitButton.textContent = 'جارٍ الإرسال...';
+      const savePromise = saveBooking(orderDetails).catch(firebaseError=>{
+        sessionStorage.setItem('firebaseSaveError', 'true');
+        console.error('Firestore save failed:', firebaseError);
+      });
+      await Promise.race([savePromise, new Promise(resolve=>setTimeout(resolve, 800))]);
+      window.location.href = 'order-confirmation/index.html';
+    } catch (error) {
+      submitButton.disabled = false;
+      successMessage.textContent = error.message || 'تعذر إرسال الطلب. تحقق من إعدادات Firebase وحاول مرة أخرى.';
+      successMessage.classList.add('is-visible');
+      console.error(error);
+    }
+  });
+  orderForm.addEventListener('invalid', event=>{
+    event.preventDefault();
+    successMessage.textContent = 'يرجى تعبئة جميع البيانات المطلوبة.';
+    successMessage.classList.add('is-visible');
+  }, true);
+</script>
+
+</body>
+</html>
